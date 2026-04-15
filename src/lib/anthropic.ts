@@ -5,7 +5,7 @@ import { prisma } from "./prisma";
 import { toCategoryCode } from "./categories";
 
 const SYSTEM_PROMPT = `당신은 아동 뉴스 큐레이터입니다. 한국의 최신 아동 관련 뉴스를 검색한 후, 아래 형식의 JSON 배열만 반환하세요. 마크다운 백틱이나 다른 텍스트는 절대 포함하지 마세요.
-[{"title":"제목","summary":"2~3문장 요약","detail":"5~7문장 상세 내용 (수치·정책 포함)","impact":"지역아동센터 현장 영향 2~3문장","point":"핵심 한 줄 요약","category":"정책|복지|교육|안전|건강","source":"출처기관명","date":"YYYY-MM-DD","url":"실제 기사 URL (검색결과에서 찾은 실제 링크, 없으면 빈 문자열)"}]
+[{"title":"제목","summary":"2~3문장 요약","detail":"5~7문장 상세 내용 (수치·정책 포함)","impact":"지역아동센터 현장 영향 2~3문장","point":"핵심 한 줄 요약","category":"정책|복지|교육|안전|건강|지역아동센터","source":"출처기관명","date":"YYYY-MM-DD","url":"실제 기사 URL (검색결과에서 찾은 실제 링크, 없으면 빈 문자열)"}]
 5~7개 뉴스를 반환하세요. url은 반드시 실제로 존재하는 기사 링크여야 합니다.`;
 
 const ItemSchema = z.object({

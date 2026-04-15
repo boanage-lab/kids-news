@@ -4,6 +4,7 @@ export const CATEGORY_CODES = [
   "EDUCATION",
   "SAFETY",
   "HEALTH",
+  "JIYEOK",
 ] as const;
 export type CategoryCode = (typeof CATEGORY_CODES)[number];
 
@@ -13,6 +14,7 @@ export const CATEGORY_LABEL: Record<CategoryCode, string> = {
   EDUCATION: "교육",
   SAFETY: "안전",
   HEALTH: "건강",
+  JIYEOK: "지역아동센터",
 };
 
 export const CATEGORY_BADGE: Record<CategoryCode, string> = {
@@ -21,6 +23,7 @@ export const CATEGORY_BADGE: Record<CategoryCode, string> = {
   EDUCATION: "bg-sky-50 text-sky-900 ring-sky-200",
   SAFETY: "bg-orange-50 text-orange-900 ring-orange-200",
   HEALTH: "bg-lime-50 text-lime-900 ring-lime-200",
+  JIYEOK: "bg-rose-50 text-rose-900 ring-rose-200",
 };
 
 const LABEL_TO_CODE: Record<string, CategoryCode> = {
@@ -29,6 +32,7 @@ const LABEL_TO_CODE: Record<string, CategoryCode> = {
   교육: "EDUCATION",
   안전: "SAFETY",
   건강: "HEALTH",
+  지역아동센터: "JIYEOK",
 };
 
 /** Accepts "정책", "POLICY", "policy" and returns a valid code, default POLICY. */
