@@ -81,7 +81,7 @@ export default async function NewsDetail({ params }: { params: Params }) {
             <span className="text-neutral-700 font-medium">출처</span> {article.source} &middot;{" "}
             <span className="text-neutral-700 font-medium">발행일</span> {dateStr}
           </div>
-          {article.url && (
+          {article.url ? (
             <a
               href={article.url}
               target="_blank"
@@ -89,6 +89,18 @@ export default async function NewsDetail({ params }: { params: Params }) {
               className="text-xs px-3 py-1.5 rounded-full bg-sky-50 text-sky-900 ring-1 ring-sky-200 hover:bg-sky-100 font-medium"
             >
               원문 보기 →
+            </a>
+          ) : (
+            <a
+              href={`https://search.naver.com/search.naver?where=news&query=${encodeURIComponent(
+                `${article.title} ${article.source}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs px-3 py-1.5 rounded-full bg-neutral-100 text-neutral-700 ring-1 ring-neutral-200 hover:bg-neutral-200 font-medium"
+              title="원문 URL이 없어 네이버 뉴스 검색으로 연결됩니다"
+            >
+              네이버에서 원문 찾기 →
             </a>
           )}
         </div>
