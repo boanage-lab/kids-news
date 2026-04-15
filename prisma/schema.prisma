@@ -1,0 +1,108 @@
+// Kids News Center — Prisma schema
+// Dev: SQLite (file:./dev.db). Prod: swap provider to "postgresql" + set DATABASE_URL to Neon.
+// Enums are intentionally avoided so the schema works identically on both engines.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String?
+  name         String?
+  image        String?
+  role         String    @default("USER") // USER | ADMIN
+  createdAt    DateTime  @default(now())
+
+  accounts  Account[]
+  sessions  Session[]
+  bookmarks Bookmark[]
+  reads     ReadLog[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model NewsArticle {
+  id          String   @id @default(cuid())
+  title       String
+  summary     String
+  detail      String
+  impact      String
+  point       String
+  category    String // POLICY | WELFARE | EDUCATION | SAFETY | HEALTH
+  source      String
+  url         String?
+  publishedAt DateTime
+  collectedAt DateTime @default(now())
+  published   Boolean  @default(true)
+  hash        String   @unique
+
+  bookmarks Bookmark[]
+  reads     ReadLog[]
+
+  @@index([category, publishedAt])
+  @@index([published, publishedAt])
+}
+
+model Bookmark {
+  userId    String
+  articleId String
+  createdAt DateTime @default(now())
+
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, articleId])
+}
+
+model ReadLog {
+  userId    String
+  articleId String
+  readAt    DateTime @default(now())
+
+  user    User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article NewsArticle @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, articleId])
+}
