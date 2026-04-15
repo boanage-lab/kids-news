@@ -14,10 +14,12 @@ export default function AdminNewsRow({
     source: string;
     publishedAt: string;
     published: boolean;
+    verified: boolean;
   };
 }) {
   const router = useRouter();
   const [published, setPublished] = useState(article.published);
+  const [verified, setVerified] = useState(article.verified);
   const [isPending, startTransition] = useTransition();
   const code = toCategoryCode(article.category);
 
@@ -29,6 +31,18 @@ export default function AdminNewsRow({
     });
     if (res.ok) {
       setPublished(!published);
+      startTransition(() => router.refresh());
+    }
+  }
+
+  async function toggleVerified() {
+    const res = await fetch(`/api/news/${article.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ verified: !verified }),
+    });
+    if (res.ok) {
+      setVerified(!verified);
       startTransition(() => router.refresh());
     }
   }
@@ -56,6 +70,18 @@ export default function AdminNewsRow({
           {article.source} · {date}
         </div>
       </div>
+      <button
+        onClick={toggleVerified}
+        disabled={isPending}
+        className={`text-[10px] px-2 py-0.5 rounded-full ring-1 font-medium shrink-0 cursor-pointer ${
+          verified
+            ? "bg-emerald-50 text-emerald-900 ring-emerald-200 hover:bg-emerald-100"
+            : "bg-amber-50 text-amber-900 ring-amber-200 hover:bg-amber-100"
+        }`}
+        title="URL 검증 상태 토글"
+      >
+        {verified ? "✓ 검증" : "⚠ 미검증"}
+      </button>
       <button
         onClick={togglePublished}
         disabled={isPending}

@@ -25,6 +25,7 @@ const PatchBody = z.object({
   source: z.string().optional(),
   url: z.string().nullable().optional(),
   published: z.boolean().optional(),
+  verified: z.boolean().optional(),
 });
 
 async function requireAdmin() {

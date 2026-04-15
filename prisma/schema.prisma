@@ -76,6 +76,7 @@ model NewsArticle {
   publishedAt DateTime
   collectedAt DateTime @default(now())
   published   Boolean  @default(true)
+  verified    Boolean  @default(false) // URL 존재 + 도달 가능성 검증 완료
   hash        String   @unique
 
   bookmarks Bookmark[]

@@ -12,13 +12,14 @@ export default async function AdminPage() {
     redirect("/");
   }
 
-  const [articles, userCount, bookmarkCount] = await Promise.all([
+  const [articles, userCount, bookmarkCount, verifiedCount] = await Promise.all([
     prisma.newsArticle.findMany({
       orderBy: { collectedAt: "desc" },
       take: 100,
     }),
     prisma.user.count(),
     prisma.bookmark.count(),
+    prisma.newsArticle.count({ where: { verified: true } }),
   ]);
 
   return (
@@ -28,8 +29,9 @@ export default async function AdminPage() {
         뉴스 검수 · 숨김 · 삭제 및 시스템 현황
       </p>
 
-      <div className="grid grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-4 gap-3 mb-8">
         <Stat label="뉴스 총량" value={articles.length} />
+        <Stat label="검증된 뉴스" value={verifiedCount} />
         <Stat label="사용자" value={userCount} />
         <Stat label="북마크" value={bookmarkCount} />
       </div>
@@ -50,6 +52,7 @@ export default async function AdminPage() {
             source: a.source,
             publishedAt: a.publishedAt.toISOString(),
             published: a.published,
+            verified: a.verified,
           }} />
         ))}
       </div>
