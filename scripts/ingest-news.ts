@@ -40,8 +40,9 @@ const LABEL_TO_CODE: Record<string, string> = {
   안전: "SAFETY",
   건강: "HEALTH",
   지역아동센터: "JIYEOK",
+  사건사고: "INCIDENT",
 };
-const VALID = new Set(["POLICY", "WELFARE", "EDUCATION", "SAFETY", "HEALTH", "JIYEOK"]);
+const VALID = new Set(["POLICY", "WELFARE", "EDUCATION", "SAFETY", "HEALTH", "JIYEOK", "INCIDENT"]);
 
 function toCode(v: unknown): string {
   if (typeof v !== "string") return "POLICY";
